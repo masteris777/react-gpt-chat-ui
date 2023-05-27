@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch } from "react-redux";
-import { addConversation } from "./ChatSlice";
+import { addConversation } from "./helpers/ChatSlice";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 

@@ -3,43 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { cloneDeep } from "lodash";
 
-import {
-	addMessage,
-	appendResponse,
-	tagConversation,
-	selectModel,
-} from "./ChatSlice";
+import { addMessage, appendResponse, selectModel } from "./helpers/ChatSlice";
+import { fetchFromAPI } from "./helpers/API";
+import { createSummary } from "./helpers/Summary";
+import TextAreaInput from "./TextAreaInput";
 
-// Helper function for fetch calls
-async function fetchFromAPI(url, method, body) {
-	try {
-		const response = await fetch(url, {
-			method,
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(body),
-		});
-
-		return response;
-	} catch (error) {
-		console.error(`Error fetching ${url}:`, error);
-	}
-}
-
-// Function component to handle textarea input
-function TextAreaInput({ text, setText, handleKeyPress }) {
-	return (
-		<textarea
-			className="input-field"
-			value={text}
-			onChange={(e) => setText(e.target.value)}
-			onKeyPress={handleKeyPress}
-		/>
-	);
-}
-
-function TextInput() {
+export default function TextInput() {
 	const [text, setText] = useState("");
 	const dispatch = useDispatch();
 	let { id, model } = useParams();
@@ -47,7 +16,7 @@ function TextInput() {
 	model = selectModel(chat.models, model);
 	const conversation = chat.conversations[id];
 
-	const handleKeyPress = (event) => {
+	const handleKeyDown = (event) => {
 		if (event.key === "Enter") {
 			event.preventDefault();
 			setText(text + "\n");
@@ -56,32 +25,10 @@ function TextInput() {
 
 	const reader = useRef(false);
 
-	const createSummary = async (conversation) => {
-		if (conversation.tag) return;
-
-		const response = await fetchFromAPI(
-			`${process.env.REACT_APP_API_URL}/summaries`,
-			"POST",
-			conversation
-		);
-
-		const { summary } = await response.json();
-
-		dispatch(tagConversation({ id: conversation.id, tag: summary }));
-	};
-
-	const checkIfOngoingAndStop = () => {
-		if (reader.current) {
-			reader.current.cancel();
-			reader.current = false;
-			return true;
-		} else return false;
-	};
-
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 
-		if (checkIfOngoingAndStop()) return;
+		if (checkIfOngoingAndStop(reader)) return;
 
 		if (text.trim() !== "" && conversation) {
 			const newConversation = cloneDeep(conversation);
@@ -102,7 +49,7 @@ function TextInput() {
 				const processStream = ({ done, value }) => {
 					if (done) {
 						reader.current = false;
-						createSummary(newConversation);
+						createSummary(newConversation, dispatch);
 						return;
 					}
 
@@ -128,7 +75,7 @@ function TextInput() {
 				<TextAreaInput
 					text={text}
 					setText={setText}
-					handleKeyPress={handleKeyPress}
+					handleKeyPress={handleKeyDown}
 				/>
 				<div
 					className={
@@ -142,4 +89,10 @@ function TextInput() {
 	);
 }
 
-export default TextInput;
+function checkIfOngoingAndStop(reader) {
+	if (reader.current) {
+		reader.current.cancel();
+		reader.current = false;
+		return true;
+	} else return false;
+}

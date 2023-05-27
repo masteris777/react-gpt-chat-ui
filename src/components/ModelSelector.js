@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { selectModel } from "./ChatSlice";
+import { selectModel } from "./helpers/ChatSlice";
 
 function ModelSelector() {
 	// const [selectedModel, setSelectedModel] = useState(null);
