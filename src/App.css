@@ -1,38 +1,160 @@
 .App {
-  text-align: center;
+	display: flex;
+	flex-direction: row;
+	height: 100vh;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.ChatHistory {
+	flex: 1;
+	/* border: 1px solid #000; */
+	overflow-y: auto;
+	background-color: black;
+	color: white;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.new-chat button {
+	width: max-content;
+	border: 1px solid grey;
+	background-color: black;
+	font-family: courier;
+	font-size: medium;
+	color: lightgrey;
+	margin: 10px;
+	padding: 10px;
+	font-weight: bold;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.chat {
+	margin: 5px;
+	padding: 5px;
+	/* border: 2px solid blue; */
+}
+.chat a {
+	text-decoration: none;
+	font-family: courier;
+	font-size: medium;
+	color: lightgrey;
+
+	/* border: 2px solid blue; */
 }
 
-.App-link {
-  color: #61dafb;
+.chat.selected {
+	font-weight: bold;
+	/* border: 2px solid blue; */
+}
+.Main {
+	flex: 5;
+	display: flex;
+	flex-direction: column;
+	border: 1px solid #000;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.ModelSelector {
+	flex: 1;
+	border: 1px solid #000;
+	background-color: lightgray;
+	text-align: center;
+	font-family: courier;
+	font-size: large;
+}
+
+.model-icons {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+}
+
+.model-icon {
+	width: 100px;
+	height: 50px;
+	padding-left: 5px;
+	padding-right: 5px;
+	/* cursor: pointer; */
+	font-weight: bold;
+	color: lightslategray;
+}
+
+.model-icon.selected {
+	font-weight: bold;
+	color: black;
+	/* border: 2px solid blue; */
+}
+
+.TextInput {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: stretch;
+}
+
+.TextInput form {
+	display: flex;
+	width: 100%;
+}
+
+.input-field {
+	flex-grow: 1;
+	box-sizing: border-box;
+	margin: 10px;
+	padding: 10px;
+	font-size: 16px;
+	resize: none;
+}
+
+.submit-question-icon button {
+	width: 64px;
+	height: 64px;
+	margin: 10px;
+	padding: 10px;
+	background-image: url("./img/submit-question-icon.png");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.stop-generation-icon button {
+	width: 64px;
+	height: 64px;
+	margin: 10px;
+	padding: 10px;
+	background-image: url("./img/stop-generation-icon.png");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.ChatWindow {
+	flex: 8;
+	border: 1px solid #000;
+	overflow-y: auto;
+}
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+th.senderColumn {
+	width: 100px;
+}
+
+td {
+	vertical-align: top;
+	margin: 5px;
+	padding: 5px;
+}
+
+td.senderCell {
+	text-align: right;
+	font-weight: bold;
+}
+
+td.textCell {
+	height: 100%;
+	position: relative;
+	border-bottom: 1px solid darkslategrey;
+}
+
+.markdown-content p {
+	margin-top: 0px;
+	padding-top: 0px;
 }
