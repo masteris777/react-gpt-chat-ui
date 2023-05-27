@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import ReactMarkdown from "react-markdown";
-import { useEffect, useRef } from "react";
+import { Message } from "./Message";
 
 function ChatWindow() {
 	const chat = useSelector((state) => state.chat);
@@ -14,7 +13,7 @@ function ChatWindow() {
 		chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
 	};
 
-	useEffect(scrollToBottom);
+	useEffect(scrollToBottom, []);
 
 	return (
 		<div className="ChatWindow">
@@ -28,16 +27,7 @@ function ChatWindow() {
 					</thead>
 					<tbody>
 						{conversation.messages.map((message, index) => (
-							<tr key={index}>
-								<td className="senderCell">
-									{message.model ? message.model : message.sender}
-								</td>
-								<td className="textCell">
-									<div className="markdown-content">
-										<ReactMarkdown>{message.text}</ReactMarkdown>
-									</div>
-								</td>
-							</tr>
+							<Message key={index} message={message} />
 						))}
 					</tbody>
 				</table>
