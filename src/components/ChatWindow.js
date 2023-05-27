@@ -13,7 +13,7 @@ function ChatWindow() {
 		chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
 	};
 
-	useEffect(scrollToBottom, []);
+	useEffect(scrollToBottom, [conversation]);
 
 	return (
 		<div className="ChatWindow">
