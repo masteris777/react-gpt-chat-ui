@@ -6,7 +6,6 @@
 
 .ChatHistory {
 	flex: 1;
-	/* border: 1px solid #000; */
 	overflow-y: auto;
 	background-color: black;
 	color: white;
@@ -27,32 +26,27 @@
 .chat {
 	margin: 5px;
 	padding: 5px;
-	/* border: 2px solid blue; */
 }
 .chat a {
 	text-decoration: none;
 	font-family: courier;
 	font-size: medium;
 	color: lightgrey;
-
-	/* border: 2px solid blue; */
 }
 
 .chat.selected {
 	font-weight: bold;
-	/* border: 2px solid blue; */
 }
 .Main {
 	flex: 5;
 	display: flex;
 	flex-direction: column;
-	border: 1px solid #000;
+	/* border: 1px solid #000; */
 }
 
 .ModelSelector {
 	flex: 1;
-	border: 1px solid #000;
-	background-color: lightgray;
+	background-color: #eee;
 	text-align: center;
 	font-family: courier;
 	font-size: large;
@@ -95,7 +89,7 @@
 
 .input-field {
 	flex-grow: 1;
-	box-sizing: border-box;
+	/* box-sizing: border-box; */
 	margin: 10px;
 	padding: 10px;
 	font-size: 16px;
@@ -125,7 +119,7 @@
 
 .ChatWindow {
 	flex: 8;
-	border: 1px solid #000;
+	/* border: 1px solid #000; */
 	overflow-y: auto;
 }
 table {
