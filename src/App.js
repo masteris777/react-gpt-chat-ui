@@ -1,4 +1,3 @@
-import "./App.css";
 import React from "react";
 import {
 	BrowserRouter as Router,
@@ -6,11 +5,12 @@ import {
 	Routes,
 	Navigate,
 } from "react-router-dom";
+import { useSelector } from "react-redux";
+import "./App.css";
 import ChatHistory from "./components/ChatHistory";
 import ChatWindow from "./components/ChatWindow";
 import ModelSelector from "./components/ModelSelector";
 import TextInput from "./components/TextInput";
-import { useSelector } from "react-redux";
 
 function App() {
 	const chat = useSelector((state) => state.chat);
@@ -21,10 +21,10 @@ function App() {
 	} else {
 		id = history[0].id;
 	}
+
 	return (
 		<Router>
 			<div className="App">
-				{/* <ChatHistory /> */}
 				<Routes>
 					<Route
 						path="/models/:model/conversations/:id"
@@ -48,7 +48,6 @@ function App() {
 							element={<Navigate to={`/models/default/conversations/${id}`} />}
 						/>
 					</Routes>
-					{/* <TextInput /> */}
 					<Routes>
 						<Route
 							path="/models/:model/conversations/:id"
