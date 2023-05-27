@@ -1,14 +1,43 @@
 import React, { useState, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { cloneDeep } from "lodash";
+
 import {
 	addMessage,
 	appendResponse,
 	tagConversation,
 	selectModel,
 } from "./ChatSlice";
-import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { cloneDeep } from "lodash";
+
+// Helper function for fetch calls
+async function fetchFromAPI(url, method, body) {
+	try {
+		const response = await fetch(url, {
+			method,
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(body),
+		});
+
+		return response;
+	} catch (error) {
+		console.error(`Error fetching ${url}:`, error);
+	}
+}
+
+// Function component to handle textarea input
+function TextAreaInput({ text, setText, handleKeyPress }) {
+	return (
+		<textarea
+			className="input-field"
+			value={text}
+			onChange={(e) => setText(e.target.value)}
+			onKeyPress={handleKeyPress}
+		/>
+	);
+}
 
 function TextInput() {
 	const [text, setText] = useState("");
@@ -26,25 +55,19 @@ function TextInput() {
 	};
 
 	const reader = useRef(false);
+
 	const createSummary = async (conversation) => {
 		if (conversation.tag) return;
-		try {
-			const response = await fetch(
-				`${process.env.REACT_APP_API_URL}/summaries`,
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(conversation),
-				}
-			);
-			const { summary } = await response.json();
 
-			dispatch(tagConversation({ id: conversation.id, tag: summary }));
-		} catch (error) {
-			console.error("Error fetching summaries:", error);
-		}
+		const response = await fetchFromAPI(
+			`${process.env.REACT_APP_API_URL}/summaries`,
+			"POST",
+			conversation
+		);
+
+		const { summary } = await response.json();
+
+		dispatch(tagConversation({ id: conversation.id, tag: summary }));
 	};
 
 	const checkIfOngoingAndStop = () => {
@@ -61,52 +84,38 @@ function TextInput() {
 		if (checkIfOngoingAndStop()) return;
 
 		if (text.trim() !== "" && conversation) {
-			try {
-				const newConversation = cloneDeep(conversation);
-				const message = { sender: "user", text };
-				dispatch(addMessage({ id, message }));
-				newConversation.messages.push(message);
+			const newConversation = cloneDeep(conversation);
+			const message = { sender: "user", text };
+			dispatch(addMessage({ id, message }));
+			newConversation.messages.push(message);
 
-				const response = await fetch(
-					`${process.env.REACT_APP_API_URL}/models/${model}/conversations`,
-					{
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify(newConversation),
+			const response = await fetchFromAPI(
+				`${process.env.REACT_APP_API_URL}/models/${model}/conversations`,
+				"POST",
+				newConversation
+			);
+
+			if (response.ok) {
+				reader.current = response.body.getReader();
+				const decoder = new TextDecoder("utf-8");
+
+				const processStream = ({ done, value }) => {
+					if (done) {
+						reader.current = false;
+						createSummary(newConversation);
+						return;
 					}
-				);
 
-				// Check if the request was successful
-				if (response.ok) {
-					reader.current = response.body.getReader();
-					const decoder = new TextDecoder("utf-8");
+					const base64Str = decoder.decode(value);
+					const chunk = atob(base64Str);
 
-					// Define recursive function to process the stream
-					const processStream = ({ done, value }) => {
-						if (done) {
-							reader.current = false;
-							createSummary(newConversation);
-							return;
-						}
-
-						const base64Str = decoder.decode(value);
-						const chunk = atob(base64Str);
-
-						dispatch(appendResponse({ id, chunk, model }));
-
-						// Continue processing
-						reader.current.read().then(processStream);
-					};
-
-					// Start processing
+					dispatch(appendResponse({ id, chunk, model }));
 					reader.current.read().then(processStream);
-				} else {
-					console.error("Server response was not ok.");
-				}
-			} catch (error) {
-				console.error("Fetch error: ", error);
+				};
+
+				reader.current.read().then(processStream);
+			} else {
+				console.error("Server response was not ok.");
 			}
 
 			setText("");
@@ -116,11 +125,10 @@ function TextInput() {
 	return (
 		<div className="TextInput">
 			<form onSubmit={handleSubmit}>
-				<textarea
-					className="input-field"
-					value={text}
-					onChange={(e) => setText(e.target.value)}
-					onKeyPress={handleKeyPress}
+				<TextAreaInput
+					text={text}
+					setText={setText}
+					handleKeyPress={handleKeyPress}
 				/>
 				<div
 					className={
