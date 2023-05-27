@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { selectModel } from "./helpers/ChatSlice";
 
 function ModelSelector() {
-	// const [selectedModel, setSelectedModel] = useState(null);
 	let { model, id } = useParams();
 	const navigate = useNavigate();
 	const chat = useSelector((state) => state.chat);
@@ -18,7 +17,6 @@ function ModelSelector() {
 
 	return (
 		<div className="ModelSelector">
-			{/* <h2>Model Selector</h2> */}
 			<div className="model-icons">
 				{models.map((m, index) => (
 					<div
@@ -28,13 +26,6 @@ function ModelSelector() {
 					>
 						{m.name}
 					</div>
-					// <img
-					// 	key={m.name}
-					// 	// src={m.icon}
-					// 	alt={m.name}
-					// 	className={`model-icon ${m.name === model ? "selected" : ""}`}
-					// 	onClick={() => handleModelSelection(m.name)}
-					// />
 				))}
 			</div>
 		</div>
