@@ -3,6 +3,9 @@ import { Provider } from "react-redux";
 import store from "./components/helpers/Store";
 import App from "./App";
 import { createRoot } from "react-dom/client";
+import { fetchAndSetModels } from "./components/helpers/Models";
+
+fetchAndSetModels();
 
 createRoot(document.getElementById("root")).render(
 	<Provider store={store}>

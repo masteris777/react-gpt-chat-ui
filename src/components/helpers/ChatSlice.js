@@ -3,12 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
 	chatHistory: JSON.parse(localStorage.getItem("chatHistory")) || [],
 	conversations: JSON.parse(localStorage.getItem("conversations")) || {},
-	models: [
+	models: JSON.parse(localStorage.getItem("models")) || [
 		{
-			name: "solaris",
-		},
-		{
-			name: "fast-gpt",
+			name: "default",
 		},
 	],
 };
