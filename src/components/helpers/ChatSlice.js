@@ -6,11 +6,9 @@ const initialState = {
 	models: [
 		{
 			name: "solaris",
-			icon: "./img/submit-question-icon.png",
 		},
 		{
 			name: "fast-gpt",
-			icon: "fast-gpt.png",
 		},
 	],
 };
