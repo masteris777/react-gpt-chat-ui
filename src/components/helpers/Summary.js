@@ -4,11 +4,7 @@ import { tagConversation } from "./ChatSlice";
 export const createSummary = async (conversation, dispatch) => {
 	if (conversation.tag) return;
 
-	const response = await fetchFromAPI(
-		`${process.env.REACT_APP_API_URL}/summaries`,
-		"POST",
-		conversation
-	);
+	const response = await fetchFromAPI(`/summaries`, "POST", conversation);
 
 	const { summary } = await response.json();
 

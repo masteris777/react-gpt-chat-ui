@@ -1,9 +1,6 @@
 import { fetchFromAPI } from "./API";
 export async function fetchAndSetModels() {
-	const response = await fetchFromAPI(
-		`${process.env.REACT_APP_API_URL}/models`,
-		"GET"
-	);
+	const response = await fetchFromAPI(`/models`, "GET");
 	if (response.ok) {
 		const { models } = await response.json();
 		localStorage.setItem("models", JSON.stringify(models));

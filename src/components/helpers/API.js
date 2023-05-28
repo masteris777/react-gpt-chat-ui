@@ -1,6 +1,6 @@
 export async function fetchFromAPI(url, method, body) {
 	try {
-		const response = await fetch(url, {
+		const response = await fetch(`${process.env.REACT_APP_API_URL}${url}`, {
 			method,
 			headers: {
 				"Content-Type": "application/json",

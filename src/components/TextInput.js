@@ -37,7 +37,7 @@ export default function TextInput() {
 			newConversation.messages.push(message);
 
 			const response = await fetchFromAPI(
-				`${process.env.REACT_APP_API_URL}/models/${model}/conversations`,
+				`/models/${model}/conversations`,
 				"POST",
 				newConversation
 			);
