@@ -24,11 +24,17 @@ export default function TextInput() {
 	};
 
 	const reader = useRef(false);
-
-	const handleSubmit = async (event) => {
+	function checkIfOngoingAndStop() {
+		if (reader.current) {
+			reader.current.cancel();
+			reader.current = false;
+			return true;
+		} else return false;
+	}
+	async function handleSubmit(event) {
 		event.preventDefault();
 
-		if (checkIfOngoingAndStop(reader)) return;
+		if (checkIfOngoingAndStop()) return;
 
 		if (text.trim() !== "" && conversation) {
 			const newConversation = cloneDeep(conversation);
@@ -70,7 +76,7 @@ export default function TextInput() {
 
 			setText("");
 		}
-	};
+	}
 
 	return (
 		<div className="TextInput">
@@ -90,12 +96,4 @@ export default function TextInput() {
 			</form>
 		</div>
 	);
-}
-
-function checkIfOngoingAndStop(reader) {
-	if (reader.current) {
-		reader.current.cancel();
-		reader.current = false;
-		return true;
-	} else return false;
 }
