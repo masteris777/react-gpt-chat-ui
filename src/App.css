@@ -46,7 +46,7 @@
 
 .ModelSelector {
 	flex: 1;
-	background-color: #eee;
+	background-color: lightgray;
 	text-align: center;
 	font-family: courier;
 	font-size: large;
@@ -126,6 +126,13 @@ th.senderColumn {
 	width: 100px;
 }
 
+.message-row {
+	border-bottom: 1px solid #f0f0f0;
+}
+.message-row.model {
+	background-color: #f8f8f8;
+}
+
 td {
 	vertical-align: top;
 	margin: 5px;
@@ -140,7 +147,6 @@ td.senderCell {
 td.textCell {
 	height: 100%;
 	position: relative;
-	border-bottom: 1px solid darkslategrey;
 }
 
 .markdown-content p {
