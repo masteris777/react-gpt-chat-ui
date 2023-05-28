@@ -10,7 +10,9 @@ export function Message({ message }) {
 			</td>
 			<td className="textCell">
 				<div className="markdown-content">
-					<ReactMarkdown>{message.text}</ReactMarkdown>
+					<ReactMarkdown>
+						{message.text + (message.end ? "" : " [...]")}
+					</ReactMarkdown>
 				</div>
 			</td>
 		</tr>

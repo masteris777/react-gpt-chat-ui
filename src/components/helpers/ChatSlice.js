@@ -72,15 +72,16 @@ const chatSlice = createSlice({
 			);
 		},
 		appendResponse: (state, action) => {
-			const { id, chunk, model } = action.payload;
+			const { id, chunk, model, end } = action.payload;
 			if (state.conversations[id]) {
 				const l = state.conversations[id].messages.length;
 				let message = state.conversations[id].messages[l - 1];
 				if (!message || message.sender !== "model") {
-					message = { sender: "model", model, text: "" };
+					message = { sender: "model", model, text: "", end };
 					state.conversations[id].messages.push(message);
 				}
 				message.text += chunk;
+				message.end = end;
 				localStorage.setItem(
 					"conversations",
 					JSON.stringify(state.conversations)
@@ -95,11 +96,7 @@ export const selectModel = (chatModels, model) => {
 	return models.indexOf(model) === -1 ? (model = models[0]) : model;
 };
 
-export const {
-	addConversation,
-	addMessage,
-	appendResponse,
-	tagConversation,
-} = chatSlice.actions;
+export const { addConversation, addMessage, appendResponse, tagConversation } =
+	chatSlice.actions;
 
 export default chatSlice.reducer;

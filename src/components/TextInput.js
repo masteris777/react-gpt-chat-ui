@@ -32,7 +32,7 @@ export default function TextInput() {
 
 		if (text.trim() !== "" && conversation) {
 			const newConversation = cloneDeep(conversation);
-			const message = { sender: "user", text };
+			const message = { sender: "user", text, end: true };
 			dispatch(addMessage({ id, message }));
 			newConversation.messages.push(message);
 
@@ -48,7 +48,10 @@ export default function TextInput() {
 
 				const processStream = ({ done, value }) => {
 					if (done) {
-						reader.current = false;
+						if (reader.current) {
+							dispatch(appendResponse({ id, chunk: "", model, end: true }));
+							reader.current = false;
+						}
 						createSummary(newConversation, dispatch);
 						return;
 					}
