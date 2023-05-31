@@ -9,6 +9,7 @@
 	overflow-y: auto;
 	background-color: black;
 	color: white;
+	flex-shrink: 0;
 }
 
 .new-chat button {
@@ -42,6 +43,8 @@
 	flex: 5;
 	display: flex;
 	flex-direction: column;
+	overflow-x: auto;
+	flex-shrink: 1;
 }
 
 .ModelSelector {
